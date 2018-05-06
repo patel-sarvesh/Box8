@@ -1,0 +1,149 @@
+<div class="container-fluid">
+  <div class="row">
+    <!-- category wise dropdown -->
+    <div class="dropdown margincss">
+      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        Select Category
+      </button>
+      <div class="dropdown-menu text-limit" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" ng-repeat="cat in uniqueCategoryList" ng-href="{{cat.category.attributes.scheme}}" target="_blank">{{cat.category.attributes.label}}</a>
+      </div>
+    </div>
+
+    <!-- Artist wise dropdown -->
+    <div class="dropdown margincss">
+      <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+        aria-expanded="false">
+        Select Artist
+      </button>
+      <div class="dropdown-menu text-limit" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" ng-repeat="artist in uniqueArtistList" ng-href="{{artist['im:artist'].attributes.href}}" target="_blank">{{artist['im:artist'].label}}</a>
+      </div>
+    </div>
+
+    <!-- search to filter home page items -->
+    <div class="form-group margincss" style="display: inline-flex">
+      <input type="text" class="form-group" id="seach" ng-model="songfilter" placeholder="Search...">
+      <div class="form-group">
+        <button class="btn btn-secondary btn-sm" type="button">Search</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <!-- filters with date-->
+    <p class="margincss">
+      <button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#collapseDate" aria-expanded="false"
+        aria-controls="collapseDate">
+        Date Filter
+      </button>
+    </p>
+    <div class="collapse" id="collapseDate">
+      <div class="filter-div filter-body">
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="dateFilter(0)">Today</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="dateFilter(7)">Last 7 Days</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="dateFilter(30)">Last 30 Days</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="dateFilter(2018)">2018</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="dateFilter(2017)">2017</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="dateFilter(2016)">2016</button>
+      </div>
+    </div>
+
+    <!-- filter with price -->
+    <p class="margincss">
+      <button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#collapsePrice" aria-expanded="false"
+        aria-controls="collapsePrice">
+        Price Filter
+      </button>
+    </p>
+    <div class="collapse" id="collapsePrice">
+      <div class="filter-div filter-body">
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="priceFilter(0)">Free</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="priceFilter(50)"> < 50 </button>
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="priceFilter(100)"> < 100</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="priceFilter(150)"> < 150</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="priceFilter(200)"> < 200</button>
+        <button type="button" class="btn btn-outline-primary btn-sm" ng-click="priceFilter(201)"> > 200 </button>
+      </div>
+    </div>
+    <p class="margincss" ng-show="filterItemListShow">
+      <button class="btn btn-secondary btn-sm" type="button" ng-click="removeFilters()">
+        Remove Filter
+      </button>
+    </p>
+
+    <p class="margincss" style="color: #fff;" ng-show="filterItemListShow"> Filter Applied : 
+      <span id="dateText"> </span>
+      <span id="priceText"> </span>
+    </p>
+  </div>
+</div>
+
+<!-- item card -->
+<div class="container-fluid" ng-hide="filterItemListShow">
+  <div class="row">
+    <div class="mp3Card card" ng-repeat="song in topSongsList | filter: songfilter">
+      <a ng-href="{{song.id.label}}" target="_blank">
+        <div class="wrapper" ng-style="{'background': 'url({{song['im:image'][2].label}})'}">
+          <div class="date">
+            <span>{{song['im:releaseDate'].attributes.label}}</span>
+          </div>
+          <div class="price">
+            <span>{{song['im:price'].label}}</span>
+          </div>
+          <div class="data">
+            <div class="content">
+              <p class="author">{{song['im:artist'].label}}
+                <button><i class="glyphicon glyphicon-heart-empty"></i></button>
+              </p>
+              <h5 class="title">
+                <a href="#">{{song.title.label}}</a>
+              </h5>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- filter Item cards -->
+<div class="container-fluid" ng-show="filterItemListShow">
+  <div class="row">
+    <div class="mp3Card card" ng-repeat="song in filterSongList | filter: songfilter">
+      <a ng-href="{{song.id.label}}" target="_blank">
+        <div class="wrapper" ng-style="{'background': 'url({{song['im:image'][2].label}})'}">
+          <div class="date">
+            <span>{{song['im:releaseDate'].attributes.label}}</span>
+          </div>
+          <div class="price">
+            <span>{{song['im:price'].label}}</span>
+          </div>
+          <div class="data">
+            <div class="content">
+              <p class="author">{{song['im:artist'].label}}</p>
+              <h5 class="title">
+                <a href="#">{{song.title.label}}</a>
+              </h5>
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- loader -->
+<div class="group display-none">
+  <div class="bigSqr">
+    <div class="square first"></div>
+    <div class="square second"></div>
+    <div class="square third"></div>
+    <div class="square fourth"></div>
+  </div>
+  <div>
